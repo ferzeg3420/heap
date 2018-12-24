@@ -2,11 +2,11 @@
 
 --  Maybe look into newHeap() having a set size that's part of the arguments and the length of the array is just the heapSize. In other words, you take the array check the size and if the input size is greater create a heap of that size and fill the entries with zeroes and then insert the values of the array. No need to use buildHeap?. 
 
--- Check if I need more preconditions.
+-- Finish testing the error messages.
 
--- Check that heapInsert() works properly for any sort of heap.
+-- See if you can come up with more robust tests.
 
--- Break the heap to see how it behaves when broken..
+-- Add precondition commments to the code.
 
 -- Translate the sparse matrix implementation in java that I have.
 
@@ -75,7 +75,6 @@ void freeHeap(Heap* pH){
       free(*pH);
       *pH = NULL;
    }
-   /* printf("Reached the end of freeHeap.\n"); // debug    */
 }
 
 // Access functions -----------------------------------------------------------
@@ -105,6 +104,7 @@ int right(int index)
 
 // heapify()
 // Establishes the minimumHeap property.
+// Preconditions: 
 void heapify( Heap H, int index)
 {
    if( H == NULL )
@@ -112,10 +112,10 @@ void heapify( Heap H, int index)
       printf("Heap Error: calling heapify() on NULL Heap reference.\n");
       exit(1);
    }
-
    int least = 0;
    int Left = left(index);
    int Right = right(index);
+
    if( Left <= H->heapSize && H->array[Left] < H->array[index] )
    {
       least = Left;
@@ -195,6 +195,11 @@ int heapMinimum(Heap H)
       printf("Heap Error: calling heapMinimum() on NULL Heap reference.\n");
       exit(1);
    }
+   if( H->heapSize < 1 )
+   {
+      printf("Heap Error: calling heapMinimum() on heap with zero elements.\n");
+      exit(1);
+   }
    return H->array[1];
 }
 
@@ -207,9 +212,14 @@ void heapDeleteMin(Heap H)
       printf("Heap Error: calling heapDeleteMin() on NULL Heap reference.\n");
       exit(1);
    }
-  swap(H->array, H->heapSize, 1);
-  H->heapSize--;
-  heapify(H, 1);
+   if( H->heapSize < 1 )
+   {
+      printf("Heap Error: calling heapMinimum() on heap with zero elements.\n");
+      exit(1);
+   }
+   swap(H->array, H->heapSize, 1);
+   H->heapSize--;
+   heapify(H, 1);
 }
 
 // heapExtractMin()
@@ -221,9 +231,15 @@ int heapExtractMin(Heap H)
       printf("Heap Error: calling heapExtractMin() on NULL Heap reference.\n");
       exit(1);
    }
-  int min = H->array[1];
-  heapDeleteMin(H);
-  return min;
+   if( H->heapSize < 1 )
+   {
+      printf("Heap Error: calling heapExtractMin() on heap with "
+              "zero elements.\n");
+      exit(1);
+   }
+   int min = H->array[1];
+   heapDeleteMin(H);
+   return min;
 }
 
 
@@ -235,6 +251,11 @@ void heapDecreaseKey(Heap H, int index, int key)
    {
       printf("Heap Error: calling heapDecreaseKey() on NULL Heap"
 	     "reference.\n");
+      exit(1);
+   }
+   if( H->heapSize < 1 || index > H->heapSize )
+   {
+      printf("Heap Error: calling heapDecreaseKey() with out of bounds index.");
       exit(1);
    }
    if( H->array[index] > key )
@@ -255,6 +276,12 @@ void heapInsert(Heap H, int k)
    if( H == NULL )
    {
       printf("Heap Error: calling heapInsert() on NULL Heap reference.\n");
+      exit(1);
+   }
+   if( H->heapSize >= H->arrayLength )
+   {
+      printf("Heap Error: calling heapInsert() when maximum capacity of"
+	     " inner array would be surpassed.\n");
       exit(1);
    }
    H->heapSize++;
