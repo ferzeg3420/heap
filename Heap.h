@@ -37,6 +37,7 @@ int right(int index);
 
 // heapify()
 // Establishes the minimumHeap property.
+// Preconditions: index is less than heap size.
 void heapify( Heap H, int index);
 
 // buildHeap()
@@ -51,22 +52,28 @@ int * heapSort(int * array, int length);
 
 // heapMinimum()
 // returns the minimum value.
+// Precondition: The size of the heap must not be zero.
 int heapMinimum(Heap H);
 
 // heapDeleteMin()
 // deletes the first element in a priorityQueue.
+// Precondition: The size of the heap must not be zero.
 void heapDeleteMin(Heap H);
 
 // heapExtractMin()
 // Returns the minimum and deletes it using heapDeleteMin()
+// Precondition: The size of the heap must not be zero.
 int heapExtractMin(Heap H);
 
 // heapDecreaseKey()
 // Modifies the key of an index only if this decreases its old value.
+// Precondition: The index must be less than heap size and greater than zero.
 void heapDecreaseKey(Heap H, int index, int key);
 
 // heapInsert()
 // Inserts a record to the priorityQueue
+// Precondition: The size of the heap must be strictly less than that of the
+// inner array
 void heapInsert(Heap H, int k);
  
 // dijkstrasAlgorithm()

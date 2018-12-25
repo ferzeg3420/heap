@@ -2,15 +2,11 @@
 
 --  Maybe look into newHeap() having a set size that's part of the arguments and the length of the array is just the heapSize. In other words, you take the array check the size and if the input size is greater create a heap of that size and fill the entries with zeroes and then insert the values of the array. No need to use buildHeap?. 
 
--- Finish testing the error messages.
+-- Test if I need to add a test of the bounds for the index in heapify(). Do the drawing!
 
 -- See if you can come up with more robust tests.
 
--- Add precondition commments to the code.
-
 -- Translate the sparse matrix implementation in java that I have.
-
--- Move everything to gitHub.
 
 -- Move to Graph and implement the last parts of djisktras algorithm.
 
@@ -51,7 +47,7 @@ Heap newHeap(int arrayLength, int * array)
    H->arrayLength = arrayLength + 1; // the zeroth entry is always empty.
    H->heapSize = arrayLength;
 
-   //   printf("H->heapSize = %d, H->arrayLength = %d\n", H->heapSize, H->arrayLength); // debug
+   //printf("H->heapSize = %d, H->arrayLength = %d\n", H->heapSize, H->arrayLength); // debug
 
    H->array = (int *)malloc( (arrayLength + 1) * sizeof(int));
    H->array[0] = 0;
@@ -62,7 +58,7 @@ Heap newHeap(int arrayLength, int * array)
       /* printf("Index %d : %d\n", i, H->array[i]); // debug */
    }
    buildHeap(H);
- 
+
    return(H);
 }
 
@@ -104,7 +100,6 @@ int right(int index)
 
 // heapify()
 // Establishes the minimumHeap property.
-// Preconditions: 
 void heapify( Heap H, int index)
 {
    if( H == NULL )
@@ -147,7 +142,7 @@ void buildHeap(Heap H)
    /* printf("Inside buildHeap():\n");// debug */
    for( int i = (H->heapSize / 2); i >= 1; i--)
    {
-     /* printf("Heapifying %d\n", i);// debug     */ 
+     /* printf("Heapifying %d\n", i);// debug     */
      heapify(H, i);
    }
    /* printHeap(H);// debug */
@@ -156,6 +151,7 @@ void buildHeap(Heap H)
 
 // heapSort()
 // Sorts an input array greatest to smallest, descending order by using a heap.
+// Preconditions: array length must be positive.
 int * heapSort(int * array, int length)
 {
    if( array == NULL )
@@ -163,6 +159,12 @@ int * heapSort(int * array, int length)
       printf("Heap Error: calling heapSort() on NULL array reference.\n");
       exit(1);
    }
+   if( length < 1 )
+   {
+      printf("Heap Error: calling heapSort() on zero or negative"
+              "argument array length.\n");
+      exit(1);
+   }      
    Heap H = newHeap(length, array);
    /* printf("\n\n---------- From inside heapSort()\nHeap: ");// debug */
    /* printHeap(H); // debug */
@@ -184,10 +186,11 @@ int * heapSort(int * array, int length)
    return H->array;
 }
 
-// priorityQueue // min priority queue
+// Priority Queue Methods -----------------------------------------------------
 
 // heapMinimum()
 // returns the minimum value in the minHeap.
+// Precondition: The size of the heap must not be zero.
 int heapMinimum(Heap H)
 {
    if( H == NULL )
@@ -205,6 +208,7 @@ int heapMinimum(Heap H)
 
 // heapDeleteMin()
 // deletes the first element in a priorityQueue.
+// Precondition: The size of the heap must not be zero.
 void heapDeleteMin(Heap H)
 {
    if( H == NULL )
@@ -224,6 +228,7 @@ void heapDeleteMin(Heap H)
 
 // heapExtractMin()
 // Returns the minimum and deletes it using heapDeleteMin()
+// Precondition: The size of the heap must not be zero.
 int heapExtractMin(Heap H)
 {
    if( H == NULL )
@@ -234,7 +239,7 @@ int heapExtractMin(Heap H)
    if( H->heapSize < 1 )
    {
       printf("Heap Error: calling heapExtractMin() on heap with "
-              "zero elements.\n");
+             "zero elements.\n");
       exit(1);
    }
    int min = H->array[1];
@@ -245,6 +250,7 @@ int heapExtractMin(Heap H)
 
 // heapDecreaseKey()
 // Modifies the key of an index only if this decreases its old value.
+// Precondition: The index must be less than heap size and greater than zero.
 void heapDecreaseKey(Heap H, int index, int key)
 {
    if( H == NULL )
@@ -271,6 +277,8 @@ void heapDecreaseKey(Heap H, int index, int key)
 
 // heapInsert()
 // Inserts a record to the priorityQueue
+// Precondition: The size of the heap must be strictly less than that of the
+// inner array
 void heapInsert(Heap H, int k)
 {
    if( H == NULL )
@@ -281,7 +289,7 @@ void heapInsert(Heap H, int k)
    if( H->heapSize >= H->arrayLength )
    {
       printf("Heap Error: calling heapInsert() when maximum capacity of"
-	     " inner array would be surpassed.\n");
+             " inner array would be surpassed.\n");
       exit(1);
    }
    H->heapSize++;
@@ -296,7 +304,7 @@ void heapInsert(Heap H, int k)
 void swap(int * array, int index1, int index2)
 {
   /* printf("\n\nSwap()\nindex: %d\nvalue: %d\n\nindex: %d\nvalue: %d\n\n" */
-  /* 	 , index1, array[index1], index2, array[index2]); // debug */
+  /*        , index1, array[index1], index2, array[index2]); // debug */
   int temp = array[index1];
   array[index1] = array[index2];
   array[index2] = temp;
