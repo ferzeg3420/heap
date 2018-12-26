@@ -2,10 +2,6 @@
 
 --  Maybe look into newHeap() having a set size that's part of the arguments and the length of the array is just the heapSize. In other words, you take the array check the size and if the input size is greater create a heap of that size and fill the entries with zeroes and then insert the values of the array. No need to use buildHeap?. 
 
--- Test if I need to add a test of the bounds for the index in heapify(). Do the drawing!
-
--- See if you can come up with more robust tests.
-
 -- Translate the sparse matrix implementation in java that I have.
 
 -- Move to Graph and implement the last parts of djisktras algorithm.
@@ -22,7 +18,6 @@
 #include<limits.h>
 #include<stdio.h>
 #include<stdlib.h>
-#include "Graph.h"
 #include "Heap.h"
 #define INF -2
 #define NIL 0
@@ -100,11 +95,17 @@ int right(int index)
 
 // heapify()
 // Establishes the minimumHeap property.
+// Precondition: Index cannot be negative or zero.
 void heapify( Heap H, int index)
 {
    if( H == NULL )
    {
       printf("Heap Error: calling heapify() on NULL Heap reference.\n");
+      exit(1);
+   }
+   if( index < 1 )
+   {
+      printf("Heap Error: calling heapify() with an out of bounds index.\n");
       exit(1);
    }
    int least = 0;
@@ -142,15 +143,15 @@ void buildHeap(Heap H)
    /* printf("Inside buildHeap():\n");// debug */
    for( int i = (H->heapSize / 2); i >= 1; i--)
    {
-     /* printf("Heapifying %d\n", i);// debug     */
+     printf("Heapifying index: %d\n", i);// debug
      heapify(H, i);
    }
    /* printHeap(H);// debug */
    /* printf("\n\n"); // debug */
 }
 
-// heapSort()
-// Sorts an input array greatest to smallest, descending order by using a heap.
+// heapSort() 
+// Sorts an input array greatest to smallest, descending order by using a heap. The zeroth entry is always zero and the array entries are shifted one step to the right.
 // Preconditions: array length must be positive.
 int * heapSort(int * array, int length)
 {
@@ -246,7 +247,6 @@ int heapExtractMin(Heap H)
    heapDeleteMin(H);
    return min;
 }
-
 
 // heapDecreaseKey()
 // Modifies the key of an index only if this decreases its old value.

@@ -37,7 +37,7 @@ int right(int index);
 
 // heapify()
 // Establishes the minimumHeap property.
-// Preconditions: index is less than heap size.
+// Precondition: Index cannot be negative or zero.
 void heapify( Heap H, int index);
 
 // buildHeap()
@@ -76,19 +76,6 @@ void heapDecreaseKey(Heap H, int index, int key);
 // inner array
 void heapInsert(Heap H, int k);
  
-// dijkstrasAlgorithm()
-// Finds the minimumal path from the source to any vector reachable from it.
-//void djikstrasAlgorithm(Graph G, int source);
-
-// initialize()
-// Initializes all vertices in G to a state that's ideal for path algorithms.
-//void initialize(Graph G, int source);
-
-// relax()
-// If the new path from vertex x to y is shorter than the previous recorded
-// path change the distance reported by vertex Y.
-//void relax(Heap H, Graph G, int vertexX, int vertexY);
-
 // Helper functions -----------------------------------------------------------
 
 // swap()
