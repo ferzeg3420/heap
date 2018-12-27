@@ -7,13 +7,14 @@
 typedef struct HeapObj* Heap;
 
 // Contructors and destructors ------------------------------------------------
+
 // newHeap()
 // Returns reference to new empty Heap object.
 //Heap newHeap(int maxLength);
 
 // newHeap()
 // Returns reference to new heap object containing an array passed as input.
-Heap newHeap(int maxLength, int * array);
+Heap newHeap(int maxHeapSize, int arrayLength, int * array);
 
 // freeQueue()
 // Frees all heap memory associated with Queue *pQ, and sets *pQ to NULL.S

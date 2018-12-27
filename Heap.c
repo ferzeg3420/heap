@@ -1,7 +1,5 @@
 /* ------------------------------------------------------------------------TODO
 
---  Maybe look into newHeap() having a set size that's part of the arguments and the length of the array is just the heapSize. In other words, you take the array check the size and if the input size is greater create a heap of that size and fill the entries with zeroes and then insert the values of the array. No need to use buildHeap?. 
-
 -- Translate the sparse matrix implementation in java that I have.
 
 -- Move to Graph and implement the last parts of djisktras algorithm.
@@ -29,28 +27,44 @@ typedef struct HeapObj
 {
    int* array;
    int heapSize;
-   int arrayLength;
+   int innerArrayLength;
 } HeapObj;
 
 // Constructors and destructors ------------------------------------------------
 // newHeap()
 // Returns reference to new heap object containing an array passed as input.
-Heap newHeap(int arrayLength, int * array)
+Heap newHeap(int maxHeapSize, int arrayLength, int * array)
 {
+   if( array == NULL )
+   {
+      printf("Heap error: calling newHeap() with a NULL array.\n");
+      exit(1);
+   }
+   printf("the length of the input array is: %d\n", arrayLength); // debug
+   if( arrayLength > maxHeapSize )
+   {
+      printf("Heap error: calling newHeap() with an array that's bigger than"
+	     "the maxiumHeapSize.\n");
+      exit(1);
+   }
    Heap H;
    H = malloc(sizeof(HeapObj));
-   H->arrayLength = arrayLength + 1; // the zeroth entry is always empty.
+   H->innerArrayLength = maxHeapSize + 1; // the zeroth entry is always empty.
    H->heapSize = arrayLength;
 
    //printf("H->heapSize = %d, H->arrayLength = %d\n", H->heapSize, H->arrayLength); // debug
 
-   H->array = (int *)malloc( (arrayLength + 1) * sizeof(int));
+   H->array = (int *)malloc( (maxHeapSize + 1) * sizeof(int));
+
    H->array[0] = 0;
-   /* printf("Index %d : %d\n", 0, H->array[0]); // debug */
    for( int i = 1; i <= arrayLength; i++ )
    {
       H->array[i] = array[i - 1];
       /* printf("Index %d : %d\n", i, H->array[i]); // debug */
+   }
+   for( int i = arrayLength + 1; i <= maxHeapSize; i++ )
+   {
+      H->array[i] = 0;
    }
    buildHeap(H);
 
@@ -166,7 +180,7 @@ int * heapSort(int * array, int length)
               "argument array length.\n");
       exit(1);
    }      
-   Heap H = newHeap(length, array);
+   Heap H = newHeap(length, length, array);
    /* printf("\n\n---------- From inside heapSort()\nHeap: ");// debug */
    /* printHeap(H); // debug */
    /* printf("\nheapSize = %d\n", H->heapSize);// debug       */
@@ -286,7 +300,7 @@ void heapInsert(Heap H, int k)
       printf("Heap Error: calling heapInsert() on NULL Heap reference.\n");
       exit(1);
    }
-   if( H->heapSize >= H->arrayLength )
+   if( H->heapSize >= H->innerArrayLength )
    {
       printf("Heap Error: calling heapInsert() when maximum capacity of"
              " inner array would be surpassed.\n");
