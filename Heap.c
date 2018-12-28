@@ -40,7 +40,6 @@ Heap newHeap(int maxHeapSize, int arrayLength, int * array)
       printf("Heap error: calling newHeap() with a NULL array.\n");
       exit(1);
    }
-   printf("the length of the input array is: %d\n", arrayLength); // debug
    if( arrayLength > maxHeapSize )
    {
       printf("Heap error: calling newHeap() with an array that's bigger than"
@@ -49,10 +48,8 @@ Heap newHeap(int maxHeapSize, int arrayLength, int * array)
    }
    Heap H;
    H = malloc(sizeof(HeapObj));
-   H->innerArrayLength = maxHeapSize + 1; // the zeroth entry is always empty.
+   H->innerArrayLength = maxHeapSize + 1;
    H->heapSize = arrayLength;
-
-   //printf("H->heapSize = %d, H->arrayLength = %d\n", H->heapSize, H->arrayLength); // debug
 
    H->array = (int *)malloc( (maxHeapSize + 1) * sizeof(int));
 
@@ -60,7 +57,6 @@ Heap newHeap(int maxHeapSize, int arrayLength, int * array)
    for( int i = 1; i <= arrayLength; i++ )
    {
       H->array[i] = array[i - 1];
-      /* printf("Index %d : %d\n", i, H->array[i]); // debug */
    }
    for( int i = arrayLength + 1; i <= maxHeapSize; i++ )
    {
@@ -154,14 +150,10 @@ void buildHeap(Heap H)
       printf("Heap Error: calling heapify() on NULL Heap reference.\n");
       exit(1);
    }
-   /* printf("Inside buildHeap():\n");// debug */
    for( int i = (H->heapSize / 2); i >= 1; i--)
    {
-     printf("Heapifying index: %d\n", i);// debug
      heapify(H, i);
    }
-   /* printHeap(H);// debug */
-   /* printf("\n\n"); // debug */
 }
 
 // heapSort() 
@@ -181,23 +173,12 @@ int * heapSort(int * array, int length)
       exit(1);
    }      
    Heap H = newHeap(length, length, array);
-   /* printf("\n\n---------- From inside heapSort()\nHeap: ");// debug */
-   /* printHeap(H); // debug */
-   /* printf("\nheapSize = %d\n", H->heapSize);// debug       */
    while( H->heapSize >= 2 )
    {
       swap(H->array, H->heapSize, 1);
       H->heapSize--;
-      /* printf("\nheapSize = %d\n", H->heapSize);// debug       */
       heapify(H, 1);
-      /* printHeap(H);// debug       */
    }
-   /* printf("\n---------------End Of heapSort()\n");// debug */
-   /* for( int i = 0; i <= 5; i++) */
-   /* { */
-   /*   printf("%d ", H->array[i]);      */
-   /* } // debug */
-
    return H->array;
 }
 
@@ -317,8 +298,6 @@ void heapInsert(Heap H, int k)
 // swaps two indices in an input array.
 void swap(int * array, int index1, int index2)
 {
-  /* printf("\n\nSwap()\nindex: %d\nvalue: %d\n\nindex: %d\nvalue: %d\n\n" */
-  /*        , index1, array[index1], index2, array[index2]); // debug */
   int temp = array[index1];
   array[index1] = array[index2];
   array[index2] = temp;
